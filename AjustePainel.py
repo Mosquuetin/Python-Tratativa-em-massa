@@ -24,9 +24,6 @@ if int(mes) < 10:
     mes = '0' + mes
 
 usuario = os.getcwd().split('\\')[2]
-caminho_idpainel = "C:\\Users\\"+usuario+"\\Directa24 Dropbox\\Auditoria\\2022\\"+mes+"."+ano+"\\- Arquivos Sistema\\- Painel Admin\\"
-caminho_it = "C:\\Users\\"+usuario+"\\Directa24 Dropbox\\Auditoria\\2022\\"+mes+"."+ano+"\\- Arquivos Sistema\\Relatorios Selenium\\ArquivoPython\\"
-caminho_final = "C:\\Users\\"+usuario+"\\Directa24 Dropbox\\Auditoria\\2022\\"+mes+"."+ano+"\\- Arquivos Sistema\\- Painel Admin\\ArquivoPython\\"
 caminho_personal = "C:\\Users\\"+usuario+"\\AppData\Roaming\\Microsoft\\Excel\\XLSTART\\Personal.xlsb"
 
 df_duplicadas = pd.DataFrame()
@@ -59,7 +56,6 @@ if len(files_final) ==1 and len(files_it) ==1:
         #df_teste = df_final
         #df_teste = df_teste[df_final['Arquivo'] == 0]
         #df_teste = df_teste.drop(['Arquivo'], axis = 1)
-        #df_teste.to_csv('C:\\Users\\ELDAN\Directa24 Dropbox\\Auditoria\\2022\\10.2022\\- Arquivos Sistema\\- Painel Admin\\ArquivoPython\\'+'Teste.txt', index=False)
         #Teste Aqui com 0, voltar para 1 para o Padrão
         df_final = df_final[df_final['Arquivo'] == 1]
         df_final = df_final.drop(['Arquivo'], axis = 1)
