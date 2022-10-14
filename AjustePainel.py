@@ -24,7 +24,10 @@ if int(mes) < 10:
     mes = '0' + mes
 
 usuario = os.getcwd().split('\\')[2]
-caminho_personal = "C:\\Users\\"+usuario+"\\AppData\Roaming\\Microsoft\\Excel\\XLSTART\\Personal.xlsb"
+caminho_idpainel = "C:\\Users\\"+usuario+"\\"
+caminho_it = "C:\\Users\\"+usuario+"\\"
+caminho_final = "C:\\Users\\"+usuario+"\\"
+caminho_personal = "C:\\Users\\"+usuario+"\\"
 
 df_duplicadas = pd.DataFrame()
 print(caminho_idpainel)
@@ -56,6 +59,7 @@ if len(files_final) ==1 and len(files_it) ==1:
         #df_teste = df_final
         #df_teste = df_teste[df_final['Arquivo'] == 0]
         #df_teste = df_teste.drop(['Arquivo'], axis = 1)
+        #df_teste.to_csv('C:\\Users\\ELDAN\Directa24 Dropbox\\Auditoria\\2022\\10.2022\\- Arquivos Sistema\\- Painel Admin\\ArquivoPython\\'+'Teste.txt', index=False)
         #Teste Aqui com 0, voltar para 1 para o Padrão
         df_final = df_final[df_final['Arquivo'] == 1]
         df_final = df_final.drop(['Arquivo'], axis = 1)
@@ -88,10 +92,11 @@ if len(files_final) ==1 and len(files_it) ==1:
         df_final = pd.merge(df_final, dfgateway, on='Id Gateway', how='left')
         df_final = pd.merge(df_final, dfpainel, on='Agente/Pais', how='left')
         df_final['Codigo'] = df_final['Codigo'].apply(lambda x: str(x).replace('nan', 'ID Não Localizada - Metodo Novo'))
+        df_final['Codigo'] = df_final['Codigo'].apply(lambda x: str(x).replace('FerID Não Localizada - Metodo Novo', 'Fernan'))
         df_final['Tipo Painel'] = df_final['Tipo Painel'].apply(lambda x: str(x).replace('nan', 'Sem Painel'))
         df_final['Tipo Painel'] = np.where((df_final['Country'].str.contains('BR')) & (df_final['Tipo Painel'].str.contains('Sem Painel')),'Base Paineis' , df_final['Tipo Painel']) 
         df_final['Tipo Painel'] = np.where((df_final['Country'].str.contains('CL')) & (df_final['Tipo Painel'].str.contains('Sem Painel')),'Base Paineis Chile' , df_final['Tipo Painel'])
-        df_final['Tipo Painel'] = np.where((df_final['Country'].str.contains('IN')) & (df_final['Tipo Painel'].str.contains('Sem Painel')),'Base Paineis Chile' , df_final['Tipo Painel'])
+        df_final['Tipo Painel'] = np.where((df_final['Country'].str.contains('IN')) & (df_final['Tipo Painel'].str.contains('Sem Painel')),'Base Paineis India' , df_final['Tipo Painel'])
         df_final['Tipo Painel'] = np.where((df_final['Country'] != 'BR')& (df_final['Country'] != 'IN') & 
         (df_final['Country'] != 'CL') & (df_final['Tipo Painel'].str.contains('Sem Painel')),'Base Paineis Mundo (menos Brasil)' , df_final['Tipo Painel'])
         files_it = glob.glob(caminho_it+'*.csv')
@@ -104,6 +109,10 @@ if len(files_final) ==1 and len(files_it) ==1:
             df_final = pd.merge(df_final, df, on='IdPayment', how='left')
             df_final['Bank Account Branch'] = df_final['Bank Account Branch'].apply(lambda x: str(x).replace('nan', ''))
             df_final['Bank Account Number'] = df_final['Bank Account Number'].apply(lambda x: str(x).replace('nan', ''))
+            df_final['Client Name'] = df_final['Client Name'].apply(lambda x: str(x).replace('-', ''))
+            #print(df_final['IdPayment'].dtypes)
+            #df_final = df_final[df_final['IdPayment'] == 446174830]
+            #print(df_final)
             df_final['IT'] = df_final['Bank Account Branch'] + ' / ' + df_final['Bank Account Number']
             df_final['IT2'] = df_final['Deposit Info']
             df_final['IT3'] = df_final['Gateway Reference']
@@ -136,6 +145,12 @@ if len(files_final) ==1 and len(files_it) ==1:
                 print('Salvando '+painel)
                 df_auxiliar = df_final[df_final['Tipo Painel'] == painel]
                 df_auxiliar.to_csv(caminho_final+mes+'.'+ano+' - '+painel+'- CSV'+'.csv', encoding='ISO-8859-1', index = False)
+            print('Ajustando arquivo de Check')
+            wb = xw.Book(caminho_personal)
+            wb2 = wb2 = xw.Book(caminho_final+mes+'.'+ano+' - Base Paineis- CSV'+'.csv')
+            tratar = wb.macro('Python.TratarArquivoCheckPainel')
+            tratar()
+            for painel in lista_auxiliar:
                 print('Colando arquivo em '+painel)
                 wb = xw.Book(caminho_personal)
                 wb2 = xw.Book(caminho_final+mes+'.'+ano+' - '+painel+'- CSV'+'.csv')
