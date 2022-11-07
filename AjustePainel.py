@@ -59,7 +59,6 @@ if len(files_final) ==1 and len(files_it) ==1:
         #df_teste = df_final
         #df_teste = df_teste[df_final['Arquivo'] == 0]
         #df_teste = df_teste.drop(['Arquivo'], axis = 1)
-        #df_teste.to_csv('C:\\Users\\ELDAN\Directa24 Dropbox\\Auditoria\\2022\\10.2022\\- Arquivos Sistema\\- Painel Admin\\ArquivoPython\\'+'Teste.txt', index=False)
         #Teste Aqui com 0, voltar para 1 para o Padrão
         df_final = df_final[df_final['Arquivo'] == 1]
         df_final = df_final.drop(['Arquivo'], axis = 1)
